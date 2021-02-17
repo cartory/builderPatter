@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="./styles.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+</head>
+
+<body>
+    <div class="container">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="dragonite-tab" data-bs-toggle="tab" data-bs-target="#dragonite"
+                    type="button" role="tab" aria-controls="dragonite" aria-selected="true">DRAGONITE</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="gardevoir-tab" data-bs-toggle="tab" data-bs-target="#gardevoir"
+                    type="button" role="tab" aria-controls="gardevoir" aria-selected="false">GARDEVOIR</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="lucario-tab" data-bs-toggle="tab" data-bs-target="#lucario" type="button"
+                    role="tab" aria-controls="lucario" aria-selected="false">LUCARIO</button>
+            </li>
+        </ul>
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="dragonite" role="tabpanel" aria-labelledby="dragonite-tab">
+                <div class="row w-100">
+                    <div class="container col-6">
+                        <img src="https://professorlotus.com/Sprites/Dragonite.gif" alt="dragonite">
+                    </div>
+                    <div class="container col-6 stats">
+                        <h5 class="card-title">DRAGONITE</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="gardevoir" role="tabpanel" aria-labelledby="gardevoir-tab">
+                <div class="row w-100">
+                    <div class="containe col-6">
+                        <img src="https://www.pkparaiso.com/imagenes/espada_escudo/sprites/animados-gigante/gardevoir-s.gif"
+                            alt="gardevoir">
+                    </div>
+                    <div class="container col-6 stats">
+                        <h5 class="card-title">GARDEVOIR</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="lucario" role="tabpanel" aria-labelledby="lucario-tab">
+                <div class="row w-100">
+                    <div class="container col-6">
+                        <img src="https://www.pkparaiso.com/imagenes/espada_escudo/sprites/animados-gigante/lucario.gif"
+                            alt="lucario">
+                    </div>
+                    <div class="container col-6 stats">
+                        <h5 class="card-title">LUCARIO</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Compiled and minified JavaScript -->
+    <script src="./index.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.6.0/dist/umd/popper.min.js"
+        integrity="sha384-KsvD1yqQ1/1+IA7gi3P0tyJcT3vR+NdBTt13hSJ2lnve8agRGXTTyNaBYmCR/Nwi"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.min.js"
+        integrity="sha384-nsg8ua9HAw1y0W1btsyWgBklPnCUAFLuTMS2G72MMONqmOymq585AcH49TLBQObG"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>

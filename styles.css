@@ -1,0 +1,16 @@
+body {
+	background-color: white;
+	/* background-image: url('https://www.tynker.com/projects/images/5789d70d1ae7a97d2e8b456b/pokemon-forest---pokemon-forest.png'); */
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+
+div > h5 {
+	background-color: white;
+	font-weight: bold;
+	font-size: 300%;
+}
+
+img {
+	height: 300px im !important;
+}
