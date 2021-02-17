@@ -132,3 +132,20 @@ class Pokeball {
         this._pokemonBuilder.buildSpeed();
     }
 }
+
+/* MAIN */
+
+const getPokemons = () => {
+    let pokeball: Pokeball = new Pokeball();
+
+    let pikachu: PokemonBuilder = new PikachuBuilder()
+    let lucario: PokemonBuilder = new LucarioBuilder();
+    let gardevoir: PokemonBuilder = new GardevoirBuilder();
+
+    return {
+        pikachu,
+        lucario,
+        gardevoir,
+        pokeball,
+    };
+}
