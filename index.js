@@ -1,3 +1,6 @@
+/* 
+    ABSTRACT BUILDER
+*/
 class Builder {
     setName(name) {
         this.name = name;
@@ -14,113 +17,106 @@ class Builder {
         return this;
     }
 
-    getPokemon() {
-        return JSON.stringify(this);
+    setObject(object) {
+        this.object = object;
+        return this;
+    }
+
+    setState(state) {
+        this.state = state;
+        return this;
     }
 }
 
+/* 
+    CONCRETE BUILDER
+*/
 class PokemonBuilder extends Builder {
     constructor() {
         super();
     }
 
-    setName() {
-        super.setName('chimchar');
-        return this;
+    setName(name) {
+        return super.setName(name);
     }
 
-    setMovs() {
-        super.setMovs([
-            { dmg: 40, name: 'scratch', color: 'grey', type: 'normal' },
-            { dmg: 60, name: 'ember', color: 'red', type: 'fire' },
-            { dmg: 70, name: 'facade', color: 'grey', type: 'normal' },
-        ]);
-        return this;
+    setMovs(movs) {
+        return super.setMovs(movs);
     }
 
-    setTypes() {
-        super.setTypes([
-            { name: 'fire', color: 'red' }
-        ]);
-        return this;
+    setTypes(types) {
+        return super.setTypes(types);
     }
+
+    setMoves(moves) {
+        return super.setMoves(moves);
+    }
+
+    setState(state) {
+        return super.setState(state);
+    }
+
+    /**
+     * @return JSON PRODUCTO (pokemon)
+     */
+    getPokemon() {
+        return JSON.stringify(this);
+    };
 }
 
-class PokemonWithStateBuilder extends Builder {
-    constructor(state) {
-        super();
-        this.setState(state);
-    }
-
-    setState(state = 'SLP') {
-        this.state = state;
-        return this;
-    }
-
-    setName() {
-        super.setName('turtwig');
-        return this;
-    }
-
-    setMovs() {
-        super.setMovs([
-            { dmg: 45, name: 'tackle', color: 'grey', type: 'normal' },
-            { dmg: 55, name: 'absorb', color: 'green', type: 'grass' },
-        ]);
-        return this;
-    }
-
-    setTypes() {
-        super.setTypes([
-            { name: 'grass', color: 'green' }
-        ]);
-        return this;
-    }
-}
-
-class PokemonWithObjectBuilder extends Builder {
-    constructor(object) {
-        super();
-        this.setObject(object);
-    }
-
-    setObject(object = 'choice scarf') {
-        this.object = object;
-        return this;
-    }
-
-    setName() {
-        super.setName('piplup');
-        return this;
-    }
-
-    setMovs() {
-        super.setMovs([
-            { dmg: 40, name: 'pound', color: 'grey', type: 'normal' },
-            { dmg: 65, name: 'bubble', color: 'blue', type: 'water' },
-        ]);
-        return this;
-    }
-
-    setTypes() {
-        super.setTypes([
-            { name: 'water', color: 'blue' }
-        ]);
-        return this;
-    }
-}
-
+/* 
+    DIRECTOR
+*/
 class Pokeball {
     setPokemonBuilder(builder) {
         this.builder = builder;
     }
-
+    
     getPokemon() {
         return JSON.parse(this.builder.getPokemon());
     }
+    // Kleyla DOES NOT LIKE THIS SH*T
+    // buildPokemon() {
+    //     this.builder.setName().setMovs().setTypes();
+    // }
 
-    buildPokemon() {
-        this.builder.setName().setMovs().setTypes();
+    buildChimchar() {
+        this.builder
+            .setName('chimchar')
+            .setMovs([
+                { dmg: 40, name: 'scratch', color: 'grey', type: 'normal' },
+                { dmg: 60, name: 'ember', color: 'red', type: 'fire' },
+                { dmg: 70, name: 'facade', color: 'grey', type: 'normal' },
+            ])
+            .setTypes([
+                { name: 'fire', color: 'red' }
+            ]);
+    }
+
+    buildPiplup() {
+        this.builder
+            .setName('piplup')
+            .setObject('Choice Scarf')
+            .setTypes([
+                { name: 'water', color: 'blue' }
+            ])
+            .setMovs([
+                { dmg: 40, name: 'pound', color: 'grey', type: 'normal' },
+                { dmg: 65, name: 'bubble', color: 'blue', type: 'water' },
+            ]);
+    }
+
+    buildTurtwig() {
+        this.builder
+            .setName('turtwig')
+            .setState('SLP')
+            .setTypes([               
+                { name: 'grass', color: 'green' }
+            ])
+            .setMovs([
+                { dmg: 45, name: 'tackle', color: 'grey', type: 'normal' },
+                { dmg: 55, name: 'absorb', color: 'green', type: 'grass' },
+            ]);
     }
 }
 
@@ -129,8 +125,8 @@ let _pokeball = new Pokeball();
 
 let starters = {
     chimchar: new PokemonBuilder(),
-    piplup: new PokemonWithObjectBuilder(),
-    turtwig: new PokemonWithStateBuilder(),
+    piplup: new PokemonBuilder(),
+    turtwig: new PokemonBuilder(),
 }
 
 document.querySelectorAll(".pokeball").forEach(pokeball => {
@@ -143,7 +139,15 @@ document.querySelectorAll(".pokeball").forEach(pokeball => {
         await sound.play();
 
         _pokeball.setPokemonBuilder(starters[pokemon]);
-        _pokeball.buildPokemon();
+
+        if (pokemon === "chimchar") {
+            _pokeball.buildChimchar();
+        } else if (pokemon === "piplup") {
+            _pokeball.buildPiplup();
+        }else {
+            _pokeball.buildTurtwig();
+        }
+
         pokemon = _pokeball.getPokemon();
 
         document.getElementById("name").innerHTML = pokemon.name.toUpperCase();
@@ -163,12 +167,7 @@ document.querySelectorAll(".pokeball").forEach(pokeball => {
                                 </span>`;
         }
         if (pokemon.object) {
-            card.innerHTML += `<span 
-                                    class="badge badge-info" 
-                                    style="font-size: 170%; border-radius: 20px; border-style: groove; border-color: white; cursor: pointer;"
-                                    title="WITH ${pokemon.object.toUpperCase()}"
-                                >${"OBJ"}
-                                </span>`;
+            card.innerHTML += `<img src="https://cdn.bulbagarden.net/upload/6/6a/Dream_Choice_Scarf_Sprite.png" title="${pokemon.object}" height="43px">`;
         }
         card.innerHTML += '</h5>';
         pokemon.moves.forEach(move => {
