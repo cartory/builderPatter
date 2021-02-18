@@ -1,107 +1,126 @@
-// "use strict";
-/*
-    PRODUCT
-*/
-class Pokemon {
-}
-/*
-    ABSTRACT BUILDER -- SPECIFIC BUILDER(S)
-*/
-class PokemonBuilder {
+class Builder {
+    setName(name) {
+        this.name = name;
+        return this;
+    }
+
+    setMovs(moves) {
+        this.moves = moves;
+        return this;
+    }
+
+    setTypes(types) {
+        this.types = types;
+        return this;
+    }
+
     getPokemon() {
-        return this._pokemon;
+        return JSON.stringify(this);
     }
 }
-class ChimcharBuilder extends PokemonBuilder {
+
+class PokemonBuilder extends Builder {
     constructor() {
         super();
-        this._pokemon = new Pokemon();
     }
-    buildHP() {
-        this._pokemon.hp = 60;
+
+    setName() {
+        super.setName('chimchar');
+        return this;
     }
-    buildAttack() {
-        this._pokemon.attack = 85;
+
+    setMovs() {
+        super.setMovs([
+            { dmg: 40, name: 'scratch', color: 'grey', type: 'normal' },
+            { dmg: 60, name: 'ember', color: 'red', type: 'fire' },
+            { dmg: 70, name: 'facade', color: 'grey', type: 'normal' },
+        ]);
+        return this;
     }
-    buildDefense() {
-        this._pokemon.defense = 50;
-    }
-    buildSpecialAttack() {
-        this._pokemon.specialAttack = 95;
-    }
-    buildSpecialDefense() {
-        this._pokemon.specialDefense = 85;
-    }
-    buildSpeed() {
-        this._pokemon.speed = 110;
+
+    setTypes() {
+        super.setTypes([
+            { name: 'fire', color: 'red' }
+        ]);
+        return this;
     }
 }
-class PiplupBuilder extends PokemonBuilder {
-    constructor() {
+
+class PokemonWithStateBuilder extends Builder {
+    constructor(state) {
         super();
-        this._pokemon = new Pokemon();
+        this.setState(state);
     }
-    buildHP() {
-        this._pokemon.hp = 68;
+
+    setState(state = 'SLP') {
+        this.state = state;
+        return this;
     }
-    buildAttack() {
-        this._pokemon.attack = 65;
+
+    setName() {
+        super.setName('turtwig');
+        return this;
     }
-    buildDefense() {
-        this._pokemon.defense = 65;
+
+    setMovs() {
+        super.setMovs([
+            { dmg: 45, name: 'tackle', color: 'grey', type: 'normal' },
+            { dmg: 55, name: 'absorb', color: 'green', type: 'grass' },
+        ]);
+        return this;
     }
-    buildSpecialAttack() {
-        this._pokemon.specialAttack = 125;
-    }
-    buildSpecialDefense() {
-        this._pokemon.specialDefense = 115;
-    }
-    buildSpeed() {
-        this._pokemon.speed = 80;
+
+    setTypes() {
+        super.setTypes([
+            { name: 'grass', color: 'green' }
+        ]);
+        return this;
     }
 }
-class TurtwigBuilder extends PokemonBuilder {
-    constructor() {
+
+class PokemonWithObjectBuilder extends Builder {
+    constructor(object) {
         super();
-        this._pokemon = new Pokemon();
+        this.setObject(object);
     }
-    buildHP() {
-        this._pokemon.hp = 70;
+
+    setObject(object = 'choice scarf') {
+        this.object = object;
+        return this;
     }
-    buildAttack() {
-        this._pokemon.attack = 110;
+
+    setName() {
+        super.setName('piplup');
+        return this;
     }
-    buildDefense() {
-        this._pokemon.defense = 70;
+
+    setMovs() {
+        super.setMovs([
+            { dmg: 40, name: 'pound', color: 'grey', type: 'normal' },
+            { dmg: 65, name: 'bubble', color: 'blue', type: 'water' },
+        ]);
+        return this;
     }
-    buildSpecialAttack() {
-        this._pokemon.specialAttack = 115;
-    }
-    buildSpecialDefense() {
-        this._pokemon.specialDefense = 70;
-    }
-    buildSpeed() {
-        this._pokemon.speed = 90;
+
+    setTypes() {
+        super.setTypes([
+            { name: 'water', color: 'blue' }
+        ]);
+        return this;
     }
 }
-/*
-    DIRECTOR
-*/
+
 class Pokeball {
-    setPokemonBuilder(newPokemonBuilder) {
-        this._pokemonBuilder = newPokemonBuilder;
+    setPokemonBuilder(builder) {
+        this.builder = builder;
     }
+
     getPokemon() {
-        return this._pokemonBuilder.getPokemon();
+        return JSON.parse(this.builder.getPokemon());
     }
 
     buildPokemon() {
-        this._pokemonBuilder.buildHP();
-        this._pokemonBuilder.buildAttack();
-        this._pokemonBuilder.buildDefense();
-        this._pokemonBuilder.buildSpecialAttack();
-        this._pokemonBuilder.buildSpecialDefense();
-        this._pokemonBuilder.buildSpeed();
+        this.builder.setName().setMovs().setTypes();
     }
 }
 
@@ -109,18 +128,9 @@ class Pokeball {
 let _pokeball = new Pokeball();
 
 let starters = {
-    chimchar: new ChimcharBuilder(),
-    piplup: new PiplupBuilder(),
-    turtwig: new TurtwigBuilder(),
-}
-
-
-const color = stat => {
-    if (stat > 89) return 'blue';
-    if (stat > 59) return  'green';
-    if (stat > 49) return 'orange';
-    if (stat > 39) return 'orange';
-    return 'red';
+    chimchar: new PokemonBuilder(),
+    piplup: new PokemonWithObjectBuilder(),
+    turtwig: new PokemonWithStateBuilder(),
 }
 
 document.querySelectorAll(".pokeball").forEach(pokeball => {
@@ -134,20 +144,51 @@ document.querySelectorAll(".pokeball").forEach(pokeball => {
 
         _pokeball.setPokemonBuilder(starters[pokemon]);
         _pokeball.buildPokemon();
-
-        document.getElementById("name").innerHTML = pokemon.toUpperCase();
-
         pokemon = _pokeball.getPokemon();
-        for (const key in pokemon) {
-            let stat = document.getElementById(key);
-            stat.innerHTML = pokemon[key];
-            stat.style.width = `${pokemon[key] > 100 ? 100 : pokemon[key]}%`;
 
-            let className = stat.className;
-            let lastClass = className.substring(className.lastIndexOf(' '));
-            stat.className = `${className.replace(lastClass, '')} w3-${color(pokemon[key])}`;
-
-            document.getElementById(key).innerHTML = pokemon[key];
+        document.getElementById("name").innerHTML = pokemon.name.toUpperCase();
+        let card = document.querySelector(".card-attack");
+        card.remove();
+        card = document.querySelector("#stats");
+        card.innerHTML = `<h5 id="name" class="card-title" style="margin-bottom: 2px;">${pokemon.name.toUpperCase()}`;
+        pokemon.types.forEach(type => {
+            card.innerHTML += `<span class="badge badge-pill badge-danger" style="background-color: ${type.color}; font-size: 170%;">${type.name}</span>`;
+        });
+        if (pokemon.state) {
+            card.innerHTML += `<span 
+                                    class="badge badge-secondary" 
+                                    style="font-size: 170%; border-radius: 20px; border-style: groove; border-color: white; cursor: pointer;"
+                                    title="${"SLEEPING...zzZZZ"}"
+                                >${pokemon.state}
+                                </span>`;
         }
+        if (pokemon.object) {
+            card.innerHTML += `<span 
+                                    class="badge badge-info" 
+                                    style="font-size: 170%; border-radius: 20px; border-style: groove; border-color: white; cursor: pointer;"
+                                    title="WITH ${pokemon.object.toUpperCase()}"
+                                >${"OBJ"}
+                                </span>`;
+        }
+        card.innerHTML += '</h5>';
+        pokemon.moves.forEach(move => {
+            card.innerHTML += `
+                <div 
+                    class="card-attack" 
+                    style="background-color: light${move.color == 'red' ? 'salmon' : move.color}; box-shadow: 0 0 3px 3px light${move.color == 'red' ? 'salmon' : move.color};"
+                >
+                    <div class="row">
+                        <div class="col col-6">
+                            <h5 class="attack-points">${move.dmg}</h5>
+                        </div>
+                        <div class="col col-6">
+                            <h5 class="attack-name">${move.name.toUpperCase()}</h5>
+                            <span class="badge badge-pill badge-danger" style="background-color: ${move.color}; font-size: 110%;">${move.type}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+
     });
 });
