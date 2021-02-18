@@ -29,7 +29,7 @@
 //     public abstract buildSpeed(): void;
 // }
 
-// class PikachuBuilder extends PokemonBuilder {
+// class ChimcharBuilder extends PokemonBuilder {
 //     constructor() {
 //         super();
 //         this._pokemon = new Pokemon();
@@ -55,7 +55,7 @@
 //     }
 // }
 
-// class GardevoirBuilder extends PokemonBuilder {
+// class PiplupBuilder extends PokemonBuilder {
 //     constructor() {
 //         super();
 //         this._pokemon = new Pokemon();
@@ -81,7 +81,7 @@
 //     }
 // }
 
-// class LucarioBuilder extends PokemonBuilder {
+// class TurtwigBuilder extends PokemonBuilder {
 //     constructor() {
 //         super();
 //         this._pokemon = new Pokemon();

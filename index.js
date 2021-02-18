@@ -2,7 +2,8 @@
 /*
     PRODUCT
 */
-class Pokemon { }
+class Pokemon {
+}
 /*
     ABSTRACT BUILDER -- SPECIFIC BUILDER(S)
 */
@@ -11,12 +12,11 @@ class PokemonBuilder {
         return this._pokemon;
     }
 }
-class DragoniteBuilder extends PokemonBuilder {
+class ChimcharBuilder extends PokemonBuilder {
     constructor() {
         super();
         this._pokemon = new Pokemon();
     }
-
     buildHP() {
         this._pokemon.hp = 60;
     }
@@ -27,7 +27,7 @@ class DragoniteBuilder extends PokemonBuilder {
         this._pokemon.defense = 50;
     }
     buildSpecialAttack() {
-        this._pokemon.specialAttack = 95;
+        this._pokemon.specialAtack = 95;
     }
     buildSpecialDefense() {
         this._pokemon.specialDefense = 85;
@@ -36,7 +36,7 @@ class DragoniteBuilder extends PokemonBuilder {
         this._pokemon.speed = 110;
     }
 }
-class GardevoirBuilder extends PokemonBuilder {
+class PiplupBuilder extends PokemonBuilder {
     constructor() {
         super();
         this._pokemon = new Pokemon();
@@ -51,7 +51,7 @@ class GardevoirBuilder extends PokemonBuilder {
         this._pokemon.defense = 65;
     }
     buildSpecialAttack() {
-        this._pokemon.specialAttack = 125;
+        this._pokemon.specialAtack = 125;
     }
     buildSpecialDefense() {
         this._pokemon.specialDefense = 115;
@@ -60,7 +60,7 @@ class GardevoirBuilder extends PokemonBuilder {
         this._pokemon.speed = 80;
     }
 }
-class LucarioBuilder extends PokemonBuilder {
+class TurtwigBuilder extends PokemonBuilder {
     constructor() {
         super();
         this._pokemon = new Pokemon();
@@ -75,7 +75,7 @@ class LucarioBuilder extends PokemonBuilder {
         this._pokemon.defense = 70;
     }
     buildSpecialAttack() {
-        this._pokemon.specialAttack = 115;
+        this._pokemon.specialAtack = 115;
     }
     buildSpecialDefense() {
         this._pokemon.specialDefense = 70;
@@ -88,15 +88,15 @@ class LucarioBuilder extends PokemonBuilder {
     DIRECTOR
 */
 class Pokeball {
-    setPokemonBuilder(newPokemonBuilder) {
+    set pokemonBuilder(newPokemonBuilder) {
         this._pokemonBuilder = newPokemonBuilder;
     }
-    getPokemon() {
+    get pokemon() {
         return this._pokemonBuilder.getPokemon();
     }
     buildPokemon() {
         this._pokemonBuilder.buildHP();
-        this._pokemonBuilder.buildAttack();
+        this._pokemonBuilder.buildAttack;
         this._pokemonBuilder.buildDefense();
         this._pokemonBuilder.buildSpecialAttack();
         this._pokemonBuilder.buildSpecialDefense();
@@ -105,55 +105,49 @@ class Pokeball {
 }
 
 /* MAIN */
-let pokeball = new Pokeball();
+let _pokeball = new Pokeball();
 
-let lucario = new LucarioBuilder();
-let dragonite = new DragoniteBuilder();
-let gardevoir = new GardevoirBuilder();
+let starters = {
+    chimchar: new ChimcharBuilder(),
+    piplup: new PiplupBuilder(),
+    turtwig: new TurtwigBuilder(),
+}
 
 
 const color = stat => {
     if (stat > 89) return 'blue';
-    if (stat > 59) return 'green';
+    if (stat > 59) return  'green';
     if (stat > 49) return 'orange';
     if (stat > 39) return 'orange';
     return 'red';
 }
-const choosePokemon = (pokemonBuilder, pokemonID) => {
-    pokeball.setPokemonBuilder(pokemonBuilder);
-    pokeball.buildPokemon();
 
-    let pokemon = pokeball.getPokemon();
-    let div = document.querySelector(pokemonID).querySelector(".stats");
-    if (div.childNodes.length < 6) {
-        for (const k in pokemon) {
-            div.innerHTML += `
-                <H3>${k.toUpperCase()}</H3>
-                <div class="w3-light-grey">
-                    <div 
-                        style="width:${pokemon[k] > 100 ? 100 : pokemon[k]}%"
-                        class="w3-container w3-${color(pokemon[k])} w3-center" 
-                    >${pokemon[k]}</div>
-                </div><br>
-            `;
-        }
-    }
+document.querySelectorAll(".pokeball").forEach(pokeball => {
+    pokeball.addEventListener("click", async _ => {
+        let pokemon = pokeball.dataset.pokemon;
+        let sound = document.getElementById('sound');
+        
+        sound.src = `./assets/${pokemon}.ogg`;
+        document.getElementById("sprite").src = `./assets/${pokemon}.gif`;
 
-    return pokemon;
-}
+        await sound.play();
 
-Object.values(document.getElementsByTagName("button")).forEach(button => {
-    button.addEventListener("click", _ => {
-        let pokemonID = button.dataset.bsTarget;
+        _pokeball.setPokemonBuilder(starters[pokemon]);
+        _pokeball.buildPokemon();
 
-        if (pokemonID === "#dragonite") {
-            choosePokemon(dragonite, pokemonID);
-        } else if (pokemonID === "#gardevoir") {
-            choosePokemon(gardevoir, pokemonID);
-        } else if (pokemonID === "#lucario") {
-            choosePokemon(lucario, pokemonID);
+        document.getElementById("name").innerHTML = pokemon.toUpperCase();
+
+        pokemon = _pokeball.getPokemon();
+        for (const key in pokemon) {
+            let stat = document.getElementById(key);
+            stat.innerHTML = pokemon[key];
+            stat.style.width = `${pokemon[key] > 100 ? 100 : pokemon[key]}%`;
+
+            let className = stat.className;
+            let lastClass = className.substring(className.lastIndexOf(' '));
+            stat.className = `${className.replace(lastClass, '')} w3-${color(pokemon[key])}`;
+
+            document.getElementById(key).innerHTML = pokemon[key];
         }
     });
 });
-
-document.getElementById("dragonite-tab").click();
