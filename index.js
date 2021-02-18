@@ -27,7 +27,7 @@ class ChimcharBuilder extends PokemonBuilder {
         this._pokemon.defense = 50;
     }
     buildSpecialAttack() {
-        this._pokemon.specialAtack = 95;
+        this._pokemon.specialAttack = 95;
     }
     buildSpecialDefense() {
         this._pokemon.specialDefense = 85;
@@ -51,7 +51,7 @@ class PiplupBuilder extends PokemonBuilder {
         this._pokemon.defense = 65;
     }
     buildSpecialAttack() {
-        this._pokemon.specialAtack = 125;
+        this._pokemon.specialAttack = 125;
     }
     buildSpecialDefense() {
         this._pokemon.specialDefense = 115;
@@ -75,7 +75,7 @@ class TurtwigBuilder extends PokemonBuilder {
         this._pokemon.defense = 70;
     }
     buildSpecialAttack() {
-        this._pokemon.specialAtack = 115;
+        this._pokemon.specialAttack = 115;
     }
     buildSpecialDefense() {
         this._pokemon.specialDefense = 70;
@@ -88,15 +88,16 @@ class TurtwigBuilder extends PokemonBuilder {
     DIRECTOR
 */
 class Pokeball {
-    set pokemonBuilder(newPokemonBuilder) {
+    setPokemonBuilder(newPokemonBuilder) {
         this._pokemonBuilder = newPokemonBuilder;
     }
-    get pokemon() {
+    getPokemon() {
         return this._pokemonBuilder.getPokemon();
     }
+
     buildPokemon() {
         this._pokemonBuilder.buildHP();
-        this._pokemonBuilder.buildAttack;
+        this._pokemonBuilder.buildAttack();
         this._pokemonBuilder.buildDefense();
         this._pokemonBuilder.buildSpecialAttack();
         this._pokemonBuilder.buildSpecialDefense();
@@ -126,7 +127,6 @@ document.querySelectorAll(".pokeball").forEach(pokeball => {
     pokeball.addEventListener("click", async _ => {
         let pokemon = pokeball.dataset.pokemon;
         let sound = document.getElementById('sound');
-        
         sound.src = `./assets/${pokemon}.ogg`;
         document.getElementById("sprite").src = `./assets/${pokemon}.gif`;
 
